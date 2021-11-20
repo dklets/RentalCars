@@ -1,0 +1,35 @@
+{% extends 'documentation/html_prototype/static_prototype.html' %}
+
+{% block title %}
+Orders list
+{% endblock %}
+
+{% block body %}
+<h1>Orders list</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Car number</th>
+            <th scope="col">Client passport number</th>
+            <th scope="col">Add date</th>
+            <th scope="col">Rental time</th>
+            <th scope="col">Car rental cost</th>
+            <th scope="col">Total cost</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for row in list_of_tuples %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>{{ row[5] }}</td>
+                </tr>
+            {% endfor %}
+        </tr>
+  </tbody>
+</table>
+{% endblock %}

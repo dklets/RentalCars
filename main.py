@@ -1,8 +1,9 @@
-from flask import Flask, render_template, url_for, request, redirect
+import sqlite3
+
+from flask import Flask, render_template, url_for, request, redirect, g
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+# from datetime import datetime
 from typing import Callable
-# from sqlalchemy.orm import relationship
 
 
 class MySQLAlchemy(SQLAlchemy):
@@ -45,7 +46,7 @@ class Clients(db.Model):
 
 class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    add_date = db.Column(db.DateTime, default=datetime.utcnow)
+    add_date = db.Column(db.String(45), nullable=False)  # db.Column(db.DateTime, default=datetime.utcnow)
     rental_time = db.Column(db.Integer, nullable=False)
     client_id = db.Column(db.String(30), db.ForeignKey('clients.id'))
     car_id = db.Column(db.String(30), db.ForeignKey('cars.id'))
@@ -92,6 +93,42 @@ def add_car():
             return "Error: add car"
     else:
         return render_template("add-car.html")
+
+
+@rental_cars.route('/add-order', methods=['POST', 'GET'])
+def add_order():
+    clients_list = Clients.query.all()  # get data from sqlite base
+    cars_list = Cars.query.all()
+
+    if request.method == 'POST':
+        client_id = int(''.join(i for i in request.form['client_id'] if i.isdigit()))
+        car_id = int(''.join(i for i in request.form['car_id'] if i.isdigit()))
+        rental_time = request.form['rental_time']
+        add_date = request.form['add_date']
+        order = Orders(client_id=client_id, car_id=car_id, rental_time=rental_time, add_date=add_date)
+        try:
+            db.session.add(order)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return "Error: add order"
+    else:
+        return render_template("add-order.html", clients_list=clients_list, cars_list=cars_list)
+
+
+@rental_cars.route('/orders-list')
+def orders_list():
+    g.db = sqlite3.connect('rental_cars.db')
+    cur = g.db.execute('SELECT number, passport_number, add_date, rental_time, rental_cost FROM (SELECT * FROM orders INNER JOIN clients ON orders.client_id = clients.id INNER JOIN cars ON orders.car_id = cars.id)')
+    linked = cur.fetchall()
+    g.db.close()
+
+    list_of_lists = [list(elem) for elem in linked]  # Add column "Total cost" = rental_time * car_rental_cost
+    for i in list_of_lists:
+        i.append(float(i[-1]) * float(i[-2]))
+    list_of_tuples = [tuple(elem) for elem in list_of_lists]
+
+    return render_template('orders-list.html', list_of_tuples=list_of_tuples)
 
 
 @rental_cars.route('/department')
