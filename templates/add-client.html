@@ -1,0 +1,19 @@
+{% extends 'documentation/html_prototype/static_prototype.html' %}
+
+{% block title %}
+Clients
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Add client</h1>
+    <form method="post">
+        <input type="text" name="first_name" id="first_name" class="form-control" placeholder="First name"><br>
+        <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last name"><br>
+        <input type="text" name="passport_number" id="passport_number" class="form-control" placeholder="Passport number"><br>
+        <input type="date" name="registration_date" id="registration_date" class="form-control"><br>
+        <input type="submit" class="btn btn-success" value="Save">
+        <input type="button" class="btn btn-warning" value="Cancel">
+    </form>
+</div>
+{% endblock %}
