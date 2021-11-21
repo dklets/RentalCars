@@ -152,6 +152,29 @@ def clients_list():
     return render_template('clients-list.html', list_of_tuples_clients=list_of_tuples_clients)
 
 
+@rental_cars.route('/cars-list')
+def cars_list():
+    g.db = sqlite3.connect('rental_cars.db')
+    cur = g.db.execute('SELECT description, rental_cost FROM (SELECT * FROM orders INNER JOIN clients ON orders.client_id = clients.id INNER JOIN cars ON orders.car_id = cars.id)')
+    linked_cars = cur.fetchall()
+    g.db.close()
+
+    print(linked_cars)
+
+    list_of_lists_cars = [list(elem) for elem in linked_cars]  # Add column "Number of orders"
+    newlist_car = {}
+    for elem in list_of_lists_cars:
+        newlist_car.setdefault(tuple(elem), list()).append(1)
+    for k, v in newlist_car.items():
+        newlist_car[k] = sum(v)
+    list_cars = [list(elem) for elem in [k for k, v in newlist_car.items()]]
+    number_orders = [[v] for k, v in newlist_car.items()]
+    new_list = [list_cars + number_orders for list_cars, number_orders in zip(list_cars, number_orders)]
+    list_of_tuples_cars = [tuple(elem) for elem in new_list]
+
+    return render_template('cars-list.html', list_of_tuples_cars=list_of_tuples_cars)
+
+
 @rental_cars.route('/department')
 def department():
     return render_template("department.html")
