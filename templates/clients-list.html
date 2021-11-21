@@ -6,6 +6,7 @@ Clients list
 
 {% block body %}
 <h1>Clients list</h1>
+<a href="/add-client" class="btn btn-primary">Add</a>
 <table class="table">
     <thead>
         <tr>
@@ -17,7 +18,7 @@ Clients list
     </thead>
     <tbody>
         <tr>
-            {% for row in list_of_tuples_clients %}
+            {% for row in linked_clients %}
                 <tr>
                     <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>

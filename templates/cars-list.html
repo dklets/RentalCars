@@ -6,6 +6,7 @@ Cars list
 
 {% block body %}
 <h1>Cars list</h1>
+<a href="/add-car" class="btn btn-primary">Add</a>
 <table class="table">
     <thead>
         <tr>
@@ -16,7 +17,7 @@ Cars list
     </thead>
     <tbody>
         <tr>
-            {% for row in list_of_tuples_cars %}
+            {% for row in linked_cars %}
                 <tr>
                     <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
