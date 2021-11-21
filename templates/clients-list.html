@@ -1,0 +1,31 @@
+{% extends 'documentation/html_prototype/static_prototype.html' %}
+
+{% block title %}
+Clients list
+{% endblock %}
+
+{% block body %}
+<h1>Clients list</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col">Registration date</th>
+            <th scope="col">Number of orders</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for row in list_of_tuples_clients %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                </tr>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+{% endblock %}
