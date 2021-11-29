@@ -22,13 +22,14 @@ Orders list
         <tr>
             {% for row in linked_orders %}
                 <tr>
-                    <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
                     <td>{{ row[4] }}</td>
                     <td>{{ row[5] }}</td>
+                    <td>{{ row[6] }}</td>
                     <td>
+                        <a href="/orders-list/{{ row[0] }}/delete-order" class="btn btn-danger">Delete</a>
                         <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
                         <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
                     </td>
