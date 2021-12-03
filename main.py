@@ -119,12 +119,32 @@ def add_order():
 def orders_list():
     g.db = sqlite3.connect('rental_cars.db')
     cur = g.db.execute("""SELECT id, number, passport_number, add_date, rental_time, rental_cost, (rental_time * rental_cost)
-                          FROM (SELECT * FROM orders INNER JOIN clients ON orders.client_id = clients.id
-                          INNER JOIN cars ON orders.car_id = cars.id)""")
+                          FROM (SELECT * FROM orders LEFT JOIN clients ON orders.client_id = clients.id
+                          LEFT JOIN cars ON orders.car_id = cars.id)""")
     linked_orders = cur.fetchall()
     g.db.close()
 
     return render_template('orders-list.html', linked_orders=linked_orders)
+
+
+@rental_cars.route('/orders-list/<int:id>/update-order', methods=['POST', 'GET'])
+def update_order(id):
+    clients_list = Clients.query.all()  # get data from sqlite base
+    cars_list = Cars.query.all()
+    order = Orders.query.get(id)
+
+    if request.method == 'POST':
+        order.client_id = int(''.join(i for i in request.form['client_id'] if i.isdigit()))
+        order.car_id = int(''.join(i for i in request.form['car_id'] if i.isdigit()))
+        order.rental_time = request.form['rental_time']
+        order.add_date = request.form['add_date']
+        try:
+            db.session.commit()
+            return redirect('/orders-list')
+        except:
+            return "Error: edit order"
+    else:
+        return render_template("add-order.html", order=order, clients_list=clients_list, cars_list=cars_list)
 
 
 @rental_cars.route('/orders-list/<int:id>/delete-order')
@@ -142,7 +162,7 @@ def order_delete(id):
 @rental_cars.route('/clients-list')
 def clients_list():
     g.db = sqlite3.connect('rental_cars.db')
-    cur = g.db.execute("""SELECT first_name, last_name, registration_date, COUNT(client_id) FROM
+    cur = g.db.execute("""SELECT id, first_name, last_name, registration_date, COUNT(client_id) FROM
                          (SELECT clients.*, orders.client_id FROM clients
                           LEFT JOIN orders ON clients.id = orders.client_id) GROUP BY id""")
     linked_clients = cur.fetchall()
@@ -150,15 +170,39 @@ def clients_list():
     return render_template('clients-list.html', linked_clients=linked_clients)
 
 
+@rental_cars.route('/clients-list/<int:id>/delete-client')
+def client_delete(id):
+    client = Clients.query.get_or_404(id)
+
+    try:
+        db.session.delete(client)
+        db.session.commit()
+        return redirect('/clients-list')
+    except:
+        return "Error: delete client"
+
+
 @rental_cars.route('/cars-list')
 def cars_list():
     g.db = sqlite3.connect('rental_cars.db')
-    cur = g.db.execute("""SELECT description, rental_cost, COUNT(car_id) FROM
+    cur = g.db.execute("""SELECT id, description, rental_cost, COUNT(car_id) FROM
                         (SELECT cars.*, orders.car_id FROM cars
                          LEFT JOIN orders ON cars.id = orders.car_id) GROUP BY id""")
     linked_cars = cur.fetchall()
     g.db.close()
     return render_template('cars-list.html', linked_cars=linked_cars)
+
+
+@rental_cars.route('/cars-list/<int:id>/delete-car')
+def car_delete(id):
+    car = Cars.query.get_or_404(id)
+
+    try:
+        db.session.delete(car)
+        db.session.commit()
+        return redirect('/cars-list')
+    except:
+        return "Error: delete car"
 
 
 @rental_cars.route('/department')

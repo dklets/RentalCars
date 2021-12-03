@@ -20,10 +20,13 @@ Clients list
         <tr>
             {% for row in linked_clients %}
                 <tr>
-                    <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>
+                        <a href="/clients-list/{{ row[0] }}/delete-client" class="btn btn-outline-danger" onclick="return confirm('Please confirm delete client')">Delete</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tr>

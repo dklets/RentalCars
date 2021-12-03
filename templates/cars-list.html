@@ -19,9 +19,12 @@ Cars list
         <tr>
             {% for row in linked_cars %}
                 <tr>
-                    <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
                     <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>
+                        <a href="/cars-list/{{ row[0] }}/delete-car" class="btn btn-outline-danger" onclick="return confirm('Please confirm delete car')">Delete</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tr>
