@@ -144,7 +144,7 @@ def update_order(id):
         except:
             return "Error: edit order"
     else:
-        return render_template("add-order.html", order=order, clients_list=clients_list, cars_list=cars_list)
+        return render_template("update-order.html", order=order, clients_list=clients_list, cars_list=cars_list)
 
 
 @rental_cars.route('/orders-list/<int:id>/delete-order')

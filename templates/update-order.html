@@ -8,25 +8,32 @@ Orders
 <div class="container mt-5">
     <h1>Edit order</h1>
     <form method="post">
+
         <label for="client_id">Client name: </label>
         <select name="client_id" id="client_id" required="required" class="form-select">
             {% for client in clients_list %}
-                <option value= "{{ client }}" SELECTED>{{ client.first_name + ' ' + client.last_name }}</option>
+                <option value= "{{ client }}">{{ client.first_name + ' ' + client.last_name }}</option>
             {% endfor %}
+        <script>
+            document.getElementById("client_id").options[{{ order.client_id }} - 1].selected=true;
+        </script>
         </select><br>
 
         <label for="car_id">Car description: </label>
         <select name="car_id" id="car_id" required="required" class="form-select">
             {% for car in cars_list %}
-                <option value= "{{ car }}" SELECTED>{{ car.description }}</option>
+                <option value= "{{ car }}">{{ car.description }}</option>
             {% endfor %}
+        <script>
+            document.getElementById("car_id").options[{{ order.car_id }} - 1].selected=true;
+        </script>
         </select><br>
 
         <label for="rental_time">Rental time: </label>
         <input type="text" name="rental_time" id="rental_time" value="{{ order.rental_time }}" class="form-control" placeholder="Rental Time"><br>
 
         <label for="add_date">Add date: </label>
-        <input type="date" name="add_date" id="add_date" class="form-control"><br>
+        <input type="date" name="add_date" id="add_date" value="{{ order.add_date }}" class="form-control"><br>
 
         <input type="submit" class="btn btn-success" value="Save">
 
