@@ -29,8 +29,8 @@ Orders list
                     <td>{{ row[5] }}</td>
                     <td>{{ row[6] }}</td>
                     <td>
-                        <a href="/orders-list/{{ row[0] }}/delete-order" class="btn btn-outline-danger" onclick="return confirm('Please confirm delete order')">Delete</a>
                         <a href="/orders-list/{{ row[0] }}/update-order" class="btn btn-outline-warning">Edit</a>
+                        <a href="/orders-list/{{ row[0] }}/delete-order" class="btn btn-outline-danger" onclick="return confirm('Please confirm delete order')">Delete</a>
                     </td>
                 </tr>
             {% endfor %}

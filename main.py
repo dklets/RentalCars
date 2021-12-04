@@ -70,7 +70,7 @@ def add_client():
         try:
             db.session.add(client)
             db.session.commit()
-            return redirect('/')
+            return redirect('/clients-list')
         except:
             return "Error: add client"
     else:
@@ -87,7 +87,7 @@ def add_car():
         try:
             db.session.add(car)
             db.session.commit()
-            return redirect('/')
+            return redirect('/cars-list')
         except:
             return "Error: add car"
     else:
@@ -108,7 +108,7 @@ def add_order():
         try:
             db.session.add(order)
             db.session.commit()
-            return redirect('/')
+            return redirect('/orders-list')
         except:
             return "Error: add order"
     else:
