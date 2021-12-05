@@ -25,6 +25,7 @@ Clients list
                     <td>{{ row[3] }}</td>
                     <td>{{ row[4] }}</td>
                     <td>
+                        <a href="/clients-list/{{ row[0] }}/update-client" class="btn btn-outline-warning">Edit</a>
                         <a href="/clients-list/{{ row[0] }}/delete-client" class="btn btn-outline-danger" onclick="return confirm('Please confirm delete client')">Delete</a>
                     </td>
                 </tr>

@@ -23,6 +23,7 @@ Cars list
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
                     <td>
+                        <a href="/cars-list/{{ row[0] }}/update-car" class="btn btn-outline-warning">Edit</a>
                         <a href="/cars-list/{{ row[0] }}/delete-car" class="btn btn-outline-danger" onclick="return confirm('Please confirm delete car')">Delete</a>
                     </td>
                 </tr>

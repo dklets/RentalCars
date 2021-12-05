@@ -170,6 +170,23 @@ def clients_list():
     return render_template('clients-list.html', linked_clients=linked_clients)
 
 
+@rental_cars.route('/clients-list/<int:id>/update-client', methods=['POST', 'GET'])
+def update_client(id):
+    client = Clients.query.get(id)
+    if request.method == 'POST':
+        client.first_name = request.form['first_name']
+        client.last_name = request.form['last_name']
+        client.passport_number = request.form['passport_number']
+        client.registration_date = request.form['registration_date']
+        try:
+            db.session.commit()
+            return redirect('/clients-list')
+        except:
+            return "Error: edit client"
+    else:
+        return render_template("update-client.html", client=client)
+
+
 @rental_cars.route('/clients-list/<int:id>/delete-client')
 def client_delete(id):
     client = Clients.query.get_or_404(id)
@@ -193,6 +210,22 @@ def cars_list():
     return render_template('cars-list.html', linked_cars=linked_cars)
 
 
+@rental_cars.route('/cars-list/<int:id>/update-car', methods=['POST', 'GET'])
+def update_car(id):
+    car = Cars.query.get(id)
+    if request.method == 'POST':
+        car.description = request.form['description']
+        car.number = request.form['number']
+        car.rental_cost = request.form['rental_cost']
+        try:
+            db.session.commit()
+            return redirect('/cars-list')
+        except:
+            return "Error: edit car"
+    else:
+        return render_template("update-car.html", car=car)
+
+
 @rental_cars.route('/cars-list/<int:id>/delete-car')
 def car_delete(id):
     car = Cars.query.get_or_404(id)
@@ -203,26 +236,6 @@ def car_delete(id):
         return redirect('/cars-list')
     except:
         return "Error: delete car"
-
-
-@rental_cars.route('/department')
-def department():
-    return render_template("department.html")
-
-
-@rental_cars.route('/departments')
-def departments():
-    return render_template("departments.html")
-
-
-@rental_cars.route('/employee')
-def employee():
-    return render_template("employee.html")
-
-
-@rental_cars.route('/employees')
-def employees():
-    return render_template("employees.html")
 
 
 if __name__ == "__main__":

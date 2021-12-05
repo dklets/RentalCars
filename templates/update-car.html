@@ -1,0 +1,19 @@
+{% extends 'documentation/html_prototype/static_prototype.html' %}
+
+{% block title %}
+Cars
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Edit car</h1>
+    <form method="post">
+        <input type="text" name="description" id="description" value ="{{ car.description }}" class="form-control" placeholder="Car description"><br>
+        <input type="text" name="number" id="number" value ="{{ car.number }}" class="form-control" placeholder="Car number"><br>
+        <input type="text" name="rental_cost" id="rental_cost" value ="{{ car.rental_cost }}" class="form-control" placeholder="Rental cost"><br>
+
+        <input type="submit" class="btn btn-success" value="Save">
+        <a href="/cars-list"><input type="button" class="btn btn-warning" value="Cancel"></a>
+    </form>
+</div>
+{% endblock %}
