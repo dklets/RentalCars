@@ -26,7 +26,6 @@ class Cars(db.Model):
     number = db.Column(db.String(30), nullable=False)
     description = db.Column(db.String(90), nullable=False)
     rental_cost = db.Column(db.Float(), nullable=False)
-    # children = relationship("Child")
 
     def __repr__(self):
         return f'<cars {self.id}>'

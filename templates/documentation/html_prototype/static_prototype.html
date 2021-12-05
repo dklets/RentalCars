@@ -10,6 +10,12 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    <div class="d-flex bd-highlight mb-3">
+        <div class="p-2 bd-highlight"><a href="/orders-list" class="btn btn-outline-primary">Orders</a></div>
+        <div class="p-2 bd-highlight"><a href="/clients-list" class="btn btn-outline-primary">Clients</a></div>
+        <div class="p-2 bd-highlight"><a href="/cars-list" class="btn btn-outline-primary"> Cars </a></div>
+        {% block nav %}{% endblock %}
+    </div>
     {% block body %}{% endblock %}
 </body>
 </html>
