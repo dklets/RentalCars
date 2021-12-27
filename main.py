@@ -114,14 +114,26 @@ def add_order():
         return render_template("add-order.html", clients_list=clients_list, cars_list=cars_list)
 
 
-@rental_cars.route('/orders-list')
+@rental_cars.route('/orders-list', methods=['POST', 'GET'])
 def orders_list():
+
+    orders_req = "SELECT id, number, passport_number, add_date, rental_time, rental_cost, (rental_time * rental_cost) \
+                      FROM (SELECT * FROM orders LEFT JOIN clients ON orders.client_id = clients.id \
+                      LEFT JOIN cars ON orders.car_id = cars.id)"
+
     g.db = sqlite3.connect('rental_cars.db')
-    cur = g.db.execute("""SELECT id, number, passport_number, add_date, rental_time, rental_cost, (rental_time * rental_cost)
-                          FROM (SELECT * FROM orders LEFT JOIN clients ON orders.client_id = clients.id
-                          LEFT JOIN cars ON orders.car_id = cars.id)""")
+    cur = g.db.execute(orders_req)
     linked_orders = cur.fetchall()
     g.db.close()
+
+    if request.method == 'POST':  # Take dates from html input "from" and "buy" to filter table by date
+        date_from = request.form['date_from']
+        date_by = request.form['date_by']
+
+        g.db = sqlite3.connect('rental_cars.db')
+        cur = g.db.execute(f"SELECT * FROM ({orders_req}) WHERE add_date > '{date_from}' AND add_date < '{date_by}';")
+        linked_orders = cur.fetchall()
+        g.db.close()
 
     return render_template('orders-list.html', linked_orders=linked_orders)
 
