@@ -10,6 +10,16 @@ Clients list
 
 {% block body %}
 <h1>Clients list</h1>
+
+<form method="POST">
+    <label for="date_from">date from: </label>
+    <input type="date" name="date_from" id="date_from" class="form-label">
+    <label for="date_by">by: </label>
+    <input type="date" name="date_by" id="date_by" class="form-label">
+
+    <button type="submit">Filter</button>
+</form>
+
 <table class="table table-striped table-hover">
     <thead>
         <tr>

@@ -126,7 +126,7 @@ def orders_list():
     linked_orders = cur.fetchall()
     g.db.close()
 
-    if request.method == 'POST':  # Take dates from html input "from" and "buy" to filter table by date
+    if request.method == 'POST':  # Take dates from html input "from" and "by" to filter table by date
         date_from = request.form['date_from']
         date_by = request.form['date_by']
 
@@ -170,14 +170,27 @@ def order_delete(id):
         return "Error: delete order"
 
 
-@rental_cars.route('/clients-list')
+@rental_cars.route('/clients-list', methods=['POST', 'GET'])
 def clients_list():
+
+    clients_req = "SELECT id, first_name, last_name, registration_date, COUNT(client_id) FROM \
+                      (SELECT clients.*, orders.client_id FROM clients \
+                      LEFT JOIN orders ON clients.id = orders.client_id) GROUP BY id"
+
     g.db = sqlite3.connect('rental_cars.db')
-    cur = g.db.execute("""SELECT id, first_name, last_name, registration_date, COUNT(client_id) FROM
-                         (SELECT clients.*, orders.client_id FROM clients
-                          LEFT JOIN orders ON clients.id = orders.client_id) GROUP BY id""")
+    cur = g.db.execute(clients_req)
     linked_clients = cur.fetchall()
     g.db.close()
+
+    if request.method == 'POST':  # Take dates from html input "from" and "by" to filter table by date
+        date_from = request.form['date_from']
+        date_by = request.form['date_by']
+
+        g.db = sqlite3.connect('rental_cars.db')
+        cur = g.db.execute(f"SELECT * FROM ({clients_req}) WHERE registration_date > '{date_from}' AND registration_date < '{date_by}';")
+        linked_clients = cur.fetchall()
+        g.db.close()
+
     return render_template('clients-list.html', linked_clients=linked_clients)
 
 
@@ -210,14 +223,27 @@ def client_delete(id):
         return "Error: delete client"
 
 
-@rental_cars.route('/cars-list')
+@rental_cars.route('/cars-list', methods=['POST', 'GET'])
 def cars_list():
+
+    cars_req = "SELECT id, description, rental_cost, COUNT(car_id) FROM \
+                    (SELECT cars.*, orders.car_id FROM cars \
+                    LEFT JOIN orders ON cars.id = orders.car_id) GROUP BY id"
+
     g.db = sqlite3.connect('rental_cars.db')
-    cur = g.db.execute("""SELECT id, description, rental_cost, COUNT(car_id) FROM
-                        (SELECT cars.*, orders.car_id FROM cars
-                         LEFT JOIN orders ON cars.id = orders.car_id) GROUP BY id""")
+    cur = g.db.execute(cars_req)
     linked_cars = cur.fetchall()
     g.db.close()
+
+    if request.method == 'POST':  # Take costs from html input "from" and "by" to filter table by date
+        cost_from = request.form['cost_from']
+        cost_by = request.form['cost_by']
+
+        g.db = sqlite3.connect('rental_cars.db')
+        cur = g.db.execute(f"SELECT * FROM ({cars_req}) WHERE rental_cost > '{cost_from}' AND rental_cost < '{cost_by}';")
+        linked_cars = cur.fetchall()
+        g.db.close()
+
     return render_template('cars-list.html', linked_cars=linked_cars)
 
 
