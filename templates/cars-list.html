@@ -5,18 +5,18 @@ Cars list
 {% endblock %}
 
 {% block nav %}
-<div class="ms-auto p-2 bd-highlight"><a href="/add-car" class="btn btn-outline-primary">Add</a></div>
+<div class="ms-auto p-2 bd-highlight"><a href="/add-car" class="btn btn-outline-primary"> Add car </a></div>
 {% endblock %}
 
 {% block body %}
 <h1>Cars list</h1>
 
 <form method="POST">
-    <label for="cost_from">cost from: </label>
+    <label for="cost_from"> cost from: </label>
     <input type="number" step="1" min="0" max="1000" id="cost_from" name="cost_from"/>
-    <label for="cost_by">by: </label>
+    <label for="cost_by"> by: </label>
     <input type="number" step="1" min="0" max="1000" id="cost_by" name="cost_by"/>
-    <button type="submit">Filter</button>
+    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
 </form>
 
 <table class="table table-striped table-hover">

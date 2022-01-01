@@ -5,8 +5,17 @@
 {% endblock %}
 
 {% block body %}
-<h1>Основная страница сайта</h1>
-<a href="/orders-list" class="btn btn-primary">Orders</a>
-<a href="/clients-list" class="btn btn-primary">Clients</a>
-<a href="/cars-list" class="btn btn-primary">Cars</a>
+
+  <div class="px-4 py-5 my-5 text-center">
+      <h1 class="display-5 fw-bold">Rental cars</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Web-application which allows users to record information about clients, cars and the rental orders.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <a class="btn btn-outline-primary btn-lg px-4" href="/orders-list" role="button">Orders</a>
+          <a class="btn btn-outline-primary btn-lg px-4" href="/clients-list" role="button">Clients</a>
+          <a class="btn btn-outline-primary btn-lg px-4" href="/cars-list" role="button">Cars</a>
+        </div>
+      </div>
+  </div>
+
 {% endblock %}
