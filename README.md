@@ -1,18 +1,15 @@
 # RentalCars
 
-CARS
-Car_Description;
-Car_Rental_cost;
-Car_Number
+“Rental cars” is web-application which allows users to record information about clients, cars and the rental orders.
 
-CLIENTS
-Client_Passport_number;
-Client_First_name;
-Client_Last_name;
-Client_Registration_date
-
-ORDERS
-Client_Passport_number;
-Car_Number;
-Order_Add_date;
-Order_Rental_time
+Application provides:
+* Storing rental orders, clients and cars in a database;
+* Display list of orders;
+* Updating the list of orders (adding, editing, removing);
+* Display list of clients;
+* Updating the list of clients (adding, editing, removing);
+* Display list of cars;
+* Updating the list of cars (adding, editing, removing);
+* Display number of the orders for cars and clients;
+* Filtering by date for orders and clients;
+* Filtering by rental cost for cars.
