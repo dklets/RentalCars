@@ -1,8 +1,33 @@
+"""
+Main module contains application code
+
+Classes:
+    Cars(),
+    Clients(),
+    Orders(),
+
+Functions:
+    add_client(),
+    add_car(),
+    add_order(),
+
+    orders_list(): displays the list of orders
+    clients_list(): displays the list of clients
+    cars_list(): displays the list of cars
+
+    update_order(): edits the order
+    update_client(): edits the client
+    update_car(): edits the car
+
+    order_delete(),
+    client_delete(),
+    car_delete().
+"""
+
 import sqlite3
 
-from flask import Flask, render_template, url_for, request, redirect, g
+from flask import Flask, render_template, request, redirect, g
 from flask_sqlalchemy import SQLAlchemy
-# from datetime import datetime
 from typing import Callable
 
 
@@ -44,7 +69,7 @@ class Clients(db.Model):
 
 class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    add_date = db.Column(db.String(45), nullable=False)  # db.Column(db.DateTime, default=datetime.utcnow)
+    add_date = db.Column(db.String(45), nullable=False)
     rental_time = db.Column(db.Integer, nullable=False)
     client_id = db.Column(db.String(30), db.ForeignKey('clients.id'))
     car_id = db.Column(db.String(30), db.ForeignKey('cars.id'))
@@ -60,12 +85,17 @@ def index():
 
 @rental_cars.route('/add-client', methods=['POST', 'GET'])
 def add_client():
+    """
+    Add client to db
+
+    """
     if request.method == 'POST':
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         passport_number = request.form['passport_number']
         registration_date = request.form['registration_date']
-        client = Clients(first_name=first_name, last_name=last_name, passport_number=passport_number, registration_date=registration_date)
+        client = Clients(first_name=first_name, last_name=last_name, passport_number=passport_number,
+                         registration_date=registration_date)
         try:
             db.session.add(client)
             db.session.commit()
@@ -78,6 +108,10 @@ def add_client():
 
 @rental_cars.route('/add-car', methods=['POST', 'GET'])
 def add_car():
+    """
+    Add car to db
+
+    """
     if request.method == 'POST':
         description = request.form['description']
         number = request.form['number']
@@ -95,6 +129,10 @@ def add_car():
 
 @rental_cars.route('/add-order', methods=['POST', 'GET'])
 def add_order():
+    """
+    Add order to db
+
+    """
     clients_list = Clients.query.all()  # get data from sqlite base
     cars_list = Cars.query.all()
 
@@ -116,7 +154,10 @@ def add_order():
 
 @rental_cars.route('/orders-list', methods=['POST', 'GET'])
 def orders_list():
+    """
+    Display the list of orders
 
+    """
     orders_req = "SELECT id, number, passport_number, add_date, rental_time, rental_cost, (rental_time * rental_cost) \
                       FROM (SELECT * FROM orders LEFT JOIN clients ON orders.client_id = clients.id \
                       LEFT JOIN cars ON orders.car_id = cars.id)"
@@ -140,6 +181,10 @@ def orders_list():
 
 @rental_cars.route('/orders-list/<int:id>/update-order', methods=['POST', 'GET'])
 def update_order(id):
+    """
+    Edit order
+
+    """
     clients_list = Clients.query.all()  # get data from sqlite base
     cars_list = Cars.query.all()
     order = Orders.query.get(id)
@@ -160,6 +205,10 @@ def update_order(id):
 
 @rental_cars.route('/orders-list/<int:id>/delete-order')
 def order_delete(id):
+    """
+    Delete order
+
+    """
     order = Orders.query.get_or_404(id)
 
     try:
@@ -172,7 +221,10 @@ def order_delete(id):
 
 @rental_cars.route('/clients-list', methods=['POST', 'GET'])
 def clients_list():
+    """
+    Display the list of clients
 
+    """
     clients_req = "SELECT id, first_name, last_name, registration_date, COUNT(client_id) FROM \
                       (SELECT clients.*, orders.client_id FROM clients \
                       LEFT JOIN orders ON clients.id = orders.client_id) GROUP BY id"
@@ -187,7 +239,8 @@ def clients_list():
         date_by = request.form['date_by']
 
         g.db = sqlite3.connect('rental_cars.db')
-        cur = g.db.execute(f"SELECT * FROM ({clients_req}) WHERE registration_date > '{date_from}' AND registration_date < '{date_by}';")
+        cur = g.db.execute(f"SELECT * FROM ({clients_req}) WHERE registration_date > '{date_from}' \
+                            AND registration_date < '{date_by}';")
         linked_clients = cur.fetchall()
         g.db.close()
 
@@ -196,6 +249,10 @@ def clients_list():
 
 @rental_cars.route('/clients-list/<int:id>/update-client', methods=['POST', 'GET'])
 def update_client(id):
+    """
+    Edit the client
+
+    """
     client = Clients.query.get(id)
     if request.method == 'POST':
         client.first_name = request.form['first_name']
@@ -213,6 +270,10 @@ def update_client(id):
 
 @rental_cars.route('/clients-list/<int:id>/delete-client')
 def client_delete(id):
+    """
+    Delete the client
+
+    """
     client = Clients.query.get_or_404(id)
 
     try:
@@ -225,7 +286,10 @@ def client_delete(id):
 
 @rental_cars.route('/cars-list', methods=['POST', 'GET'])
 def cars_list():
+    """
+    Display the list of cars
 
+    """
     cars_req = "SELECT id, description, rental_cost, COUNT(car_id) FROM \
                     (SELECT cars.*, orders.car_id FROM cars \
                     LEFT JOIN orders ON cars.id = orders.car_id) GROUP BY id"
@@ -240,7 +304,8 @@ def cars_list():
         cost_by = request.form['cost_by']
 
         g.db = sqlite3.connect('rental_cars.db')
-        cur = g.db.execute(f"SELECT * FROM ({cars_req}) WHERE rental_cost > '{cost_from}' AND rental_cost < '{cost_by}';")
+        cur = g.db.execute(f"SELECT * FROM ({cars_req}) WHERE rental_cost > '{cost_from}' \
+                            AND rental_cost < '{cost_by}';")
         linked_cars = cur.fetchall()
         g.db.close()
 
@@ -249,6 +314,10 @@ def cars_list():
 
 @rental_cars.route('/cars-list/<int:id>/update-car', methods=['POST', 'GET'])
 def update_car(id):
+    """
+    Edit the car data
+
+    """
     car = Cars.query.get(id)
     if request.method == 'POST':
         car.description = request.form['description']
@@ -265,6 +334,10 @@ def update_car(id):
 
 @rental_cars.route('/cars-list/<int:id>/delete-car')
 def car_delete(id):
+    """
+    Delete the car
+
+    """
     car = Cars.query.get_or_404(id)
 
     try:

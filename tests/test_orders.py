@@ -1,11 +1,18 @@
-from main import rental_cars
+import sys
 import unittest
 import re
+
+sys.path.insert(0, '/home/dklets/Projects/RentalCars')
+from main import rental_cars
 
 
 class FlaskTestCase(unittest.TestCase):
     # Tests orders list
     def test_orders(self):
+        """
+        Unit test for orders_list
+
+        """
         tester = rental_cars.test_client(self)
         response = tester.get('/orders-list')
 
